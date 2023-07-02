@@ -718,6 +718,6 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 
 ## License
 
-This project is licensed under the MIT License. Feel free to use, modify, and distribute the code as per the license terms.
+This project is licensed under the GPL-3.0 License. Feel free to use, modify, and distribute the code as per the license terms.
 
 Copyright 2023, Max Base
