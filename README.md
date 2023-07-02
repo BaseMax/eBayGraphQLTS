@@ -87,6 +87,331 @@ Note: Make sure you have MongoDB installed and running locally or provide the ap
 
 Feel free to customize this table by adding or removing queries and mutations based 
 
+## GraphQL Examples
+
+### `getUser(id: ID!)`
+
+```graphql
+query {
+  getUser(id: "user123") {
+    id
+    name
+    email
+    createdDate
+  }
+}
+```
+
+### `getProduct(id: ID!)`
+
+```graphql
+query {
+  getProduct(id: "product123") {
+    id
+    title
+    description
+    price
+    seller {
+      id
+      name
+    }
+  }
+}
+```
+
+### `searchProducts(searchInput: String)`
+
+```graphql
+query {
+  searchProducts(searchInput: "iPhone") {
+    id
+    title
+    price
+  }
+}
+```
+
+### `getBidsByUser(userId: ID!)`
+
+```graphql
+query {
+  getBidsByUser(userId: "user123") {
+    id
+    amount
+    product {
+      id
+      title
+    }
+  }
+}
+```
+
+### `getCartByUser(userId: ID!)`
+
+```graphql
+query {
+  getCartByUser(userId: "user123") {
+    id
+    product {
+      id
+      title
+      price
+    }
+    quantity
+  }
+}
+```
+
+### `getCategories`
+
+```graphql
+query {
+  getCategories {
+    id
+    name
+  }
+}
+```
+
+### `registerUser(input: UserInput!)`
+
+```graphql
+mutation {
+  registerUser(input: {
+    name: "John Doe",
+    email: "johndoe@example.com",
+    password: "password123"
+  }) {
+    id
+    name
+    email
+    createdDate
+  }
+}
+```
+
+### `createProduct(input: ProductInput!)`
+
+```graphql
+mutation {
+  createProduct(input: {
+    title: "iPhone 12 Pro",
+    description: "A powerful smartphone with advanced features.",
+    price: 999.99,
+    sellerId: "seller123"
+  }) {
+    id
+    title
+    description
+    price
+    seller {
+      id
+      name
+    }
+  }
+}
+```
+
+### `placeBid(productId: ID!, amount: Float!)`
+
+```graphql
+mutation {
+  placeBid(productId: "product123", amount: 500.0) {
+    id
+    amount
+    product {
+      id
+      title
+    }
+  }
+}
+```
+
+### `addToCart(userId: ID!, productId: ID!)`
+
+```graphql
+mutation {
+  addToCart(userId: "user123", productId: "product123") {
+    id
+    product {
+      id
+      title
+      price
+    }
+    quantity
+  }
+}
+```
+
+### `checkout(userId: ID!)`
+
+```graphql
+mutation {
+  checkout(userId: "user123") {
+    id
+    totalAmount
+    items {
+      product {
+        id
+        title
+        price
+      }
+      quantity
+    }
+  }
+}
+```
+
+### `leaveReview(productId: ID!, rating: Int!, comment: String!)`
+
+```graphql
+mutation {
+  leaveReview(productId: "product123", rating: 4, comment: "Great product!") {
+    id
+    rating
+    comment
+    product {
+      id
+      title
+    }
+  }
+}
+```
+
+### `getWinningBid(productId: ID!)`
+
+```graphql
+query {
+  getWinningBid(productId: "product123") {
+    id
+    amount
+    bidder {
+      id
+      name
+    }
+  }
+}
+```
+
+### `getOrdersByUser(userId: ID!)`
+
+```graphql
+query {
+  getOrdersByUser(userId: "user123") {
+    id
+    totalAmount
+    items {
+      product {
+        id
+        title
+        price
+      }
+      quantity
+    }
+  }
+}
+```
+
+### `getProductReviews(productId: ID!)`
+
+```graphql
+query {
+  getProductReviews(productId: "product123") {
+    id
+    rating
+    comment
+    user {
+      id
+      name
+    }
+  }
+}
+```
+
+### `getRecentProducts`
+
+```graphql
+query {
+  getRecentProducts {
+    id
+    title
+    price
+  }
+}
+```
+
+### `updateProduct(id: ID!, input: ProductInput!)`
+
+```graphql
+mutation {
+  updateProduct(id: "product123", input: {
+    title: "iPhone 13 Pro",
+    description: "The latest flagship smartphone from Apple.",
+    price: 1099.99
+  }) {
+    id
+    title
+    description
+    price
+    seller {
+      id
+      name
+    }
+  }
+}
+```
+
+### `removeFromCart(userId: ID!, productId: ID!)`
+
+```graphql
+mutation {
+  removeFromCart(userId: "user123", productId: "product123") {
+    id
+    product {
+      id
+      title
+      price
+    }
+    quantity
+  }
+}
+```
+
+### `updateShippingAddress(userId: ID!, input: AddressInput!)`
+
+```graphql
+mutation {
+  updateShippingAddress(userId: "user123", input: {
+    street: "123 Main St",
+    city: "New York",
+    state: "NY",
+    zipCode: "10001"
+  }) {
+    id
+    shippingAddress {
+      street
+      city
+      state
+      zipCode
+    }
+  }
+}
+```
+
+### `markNotificationAsRead(userId: ID!, notificationId: ID!)`
+
+```graphql
+mutation {
+  markNotificationAsRead(userId: "user123", notificationId: "notification123") {
+    id
+    title
+    content
+    isRead
+  }
+}
+```
+
+These are just a few examples of how the queries and mutations can be used. Feel free to adapt them based on your specific use case and API design.
 
 ## Contributing
 
