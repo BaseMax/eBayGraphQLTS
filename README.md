@@ -411,6 +411,105 @@ mutation {
 }
 ```
 
+### `getSellerSales(userId: ID!)`
+
+```graphql
+query {
+  getSellerSales(userId: "seller123") {
+    id
+    totalAmount
+    buyer {
+      id
+      name
+    }
+  }
+}
+```
+
+### `getSellerRevenue(userId: ID!)`
+
+```graphql
+query {
+  getSellerRevenue(userId: "seller123") {
+    totalRevenue
+  }
+}
+```
+
+### `getPopularProducts`
+
+```graphql
+query {
+  getPopularProducts {
+    id
+    title
+    price
+  }
+}
+```
+
+### `deleteProduct(id: ID!)`
+
+```graphql
+mutation {
+  deleteProduct(id: "product123") {
+    id
+    title
+  }
+}
+```
+
+### `updateBillingAddress(userId: ID!, input: AddressInput!)`
+
+```graphql
+mutation {
+  updateBillingAddress(userId: "user123", input: {
+    street: "456 Main St",
+    city: "Los Angeles",
+    state: "CA",
+    zipCode: "90001"
+  }) {
+    id
+    billingAddress {
+      street
+      city
+      state
+      zipCode
+    }
+  }
+}
+```
+
+### `addPaymentMethod(userId: ID!, input: PaymentMethodInput!)`
+
+```graphql
+mutation {
+  addPaymentMethod(userId: "user123", input: {
+    type: "credit_card",
+    cardNumber: "**** **** **** 1234",
+    expirationDate: "12/24",
+    cvv: "***"
+  }) {
+    id
+    type
+    cardNumber
+  }
+}
+```
+
+### `markAllNotificationsAsRead(userId: ID!)`
+
+```graphql
+mutation {
+  markAllNotificationsAsRead(userId: "user123") {
+    id
+    title
+    content
+    isRead
+  }
+}
+```
+
 These are just a few examples of how the queries and mutations can be used. Feel free to adapt them based on your specific use case and API design.
 
 ## Contributing
