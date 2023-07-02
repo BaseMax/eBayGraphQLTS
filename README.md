@@ -34,6 +34,11 @@ This is a project for building an eBay clone website using GraphQL and TypeScrip
 
 Note: Make sure you have MongoDB installed and running locally or provide the appropriate connection details in the `.env` file.
 
+## GraphQL Queries and Mutations
+
+| Query/Mutation | Description |
+| -------------- | ----------- |
+
 ## Contributing
 
 Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
