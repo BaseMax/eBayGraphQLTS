@@ -608,6 +608,102 @@ mutation {
 }
 ```
 
+### `getSellerListings(userId: ID!)`
+
+```graphql
+query {
+  getSellerListings(userId: "seller123") {
+    id
+    title
+    price
+    status
+  }
+}
+```
+
+### `getBuyerPurchases(userId: ID!)`
+
+```graphql
+query {
+  getBuyerPurchases(userId: "user123") {
+    id
+    totalAmount
+    seller {
+      id
+      name
+    }
+  }
+}
+```
+
+### `getCategoryProducts(categoryId: ID!)`
+
+```graphql
+query {
+  getCategoryProducts(categoryId: "category123") {
+    id
+    title
+    price
+  }
+}
+```
+
+### `updateUser(id: ID!, input: UserInput!)`
+
+```graphql
+mutation {
+  updateUser(id: "user123", input: {
+    name: "Jane Smith",
+    email: "janesmith@example.com"
+  }) {
+    id
+    name
+    email
+  }
+}
+```
+
+### `removeReview(productId: ID!, reviewId: ID!)`
+
+```graphql
+mutation {
+  removeReview(productId: "product123", reviewId: "review123") {
+    id
+    rating
+    comment
+  }
+}
+```
+
+### `clearCart(userId: ID!)`
+
+```graphql
+mutation {
+  clearCart(userId: "user123") {
+    id
+    product {
+      id
+      title
+      price
+    }
+    quantity
+  }
+}
+```
+
+### `markNotificationAsUnread(userId: ID!, notificationId: ID!)`
+
+```graphql
+mutation {
+  markNotificationAsUnread(userId: "user123", notificationId: "notification123") {
+    id
+    title
+    content
+    isRead
+  }
+}
+```
+
 These are just a few examples of how the queries and mutations can be used. Feel free to adapt them based on your specific use case and API design.
 
 ## Contributing
