@@ -143,4 +143,86 @@ describe("AppController (e2e)", () => {
       await userModel.deleteOne({ email: authUser.email });
     });
   });
+
+  describe("product", () => {
+    let productId: string;
+
+    it("should create product", async () => {
+      const query = `
+      mutation product($input: CreateProductInput!) {
+        createProduct(pr: $input) {
+          id
+          title
+          seller {
+            id
+            name
+          }
+        }
+      }
+      `;
+      const variables = {
+        input: {
+          title: "test name",
+          price: 222,
+          description: "terrorist attack",
+        },
+      };
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query, variables })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+
+      expect(body.data.createProduct).toHaveProperty("id");
+      expect(body.data.createProduct).toHaveProperty("title");
+
+      expect(body.data.createProduct).toHaveProperty("seller");
+      expect(body.data.createProduct.seller).toHaveProperty("id");
+      expect(body.data.createProduct.seller).toHaveProperty("name");
+
+      productId = body.data.createProduct.id;
+    });
+
+    it("should update product", async () => {
+      const query = `
+      mutation product($input: UpdateProductInput!) {
+        updateProduct(pr: $input) {
+          id
+          title
+          price
+          seller {
+            id
+            name
+          }
+        }
+      }
+      `;
+      const variables = {
+        input: {
+          title: "update",
+          price: 11,
+          description: "terrorist attack",
+          productId,
+        },
+      };
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query, variables })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+
+      expect(body.data.updateProduct).toHaveProperty("id");
+      expect(body.data.updateProduct).toHaveProperty("title");
+      expect(body.data.updateProduct.title).toBe("update");
+      expect(body.data.updateProduct.price).toBe(11);
+
+      expect(body.data.updateProduct).toHaveProperty("seller");
+      expect(body.data.updateProduct.seller).toHaveProperty("id");
+      expect(body.data.updateProduct.seller).toHaveProperty("name");
+    });
+  });
 });

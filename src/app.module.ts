@@ -10,6 +10,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { MongooseModule } from "@nestjs/mongoose";
 import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { AuthenticationModule } from "./components/authentication/authentication.module";
+import { ProductModule } from "./components/product/product.module";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthenticationModule } from "./components/authentication/authentication
       },
     }),
     AuthenticationModule,
+    ProductModule,
   ],
 })
 export class AppModule {}
