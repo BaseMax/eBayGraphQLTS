@@ -20,4 +20,9 @@ export class ProductResolver {
   public async updateProduct(@Args("pr") pr: UpdateProductInput) {
     return await this.productService.updateProduct(pr);
   }
+
+  @Mutation("deleteProduct")
+  public async deleteProduct(@Args("id") id: string) {
+    return await this.productService.deleteProduct(id);
+  }
 }

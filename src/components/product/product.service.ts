@@ -38,4 +38,13 @@ export class ProductService {
       { returnOriginal: false, populate: { path: "seller" } },
     );
   }
+
+  public async deleteProduct(id: string) {
+    const { deletedCount } = await this.productModel.deleteOne({ _id: id });
+
+    return {
+      id,
+      deleted: deletedCount >= 1 ? true : false,
+    };
+  }
 }

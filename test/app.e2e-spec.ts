@@ -224,5 +224,27 @@ describe("AppController (e2e)", () => {
       expect(body.data.updateProduct.seller).toHaveProperty("id");
       expect(body.data.updateProduct.seller).toHaveProperty("name");
     });
+
+    it("should delete product", async () => {
+      const query = `
+      mutation product {
+        deleteProduct(id: "${productId}") {
+          id
+          deleted
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+
+      expect(body.data.deleteProduct).toHaveProperty("id");
+      expect(body.data.deleteProduct).toHaveProperty("deleted");
+      expect(body.data.deleteProduct.deleted).toBeTruthy();
+    });
   });
 });

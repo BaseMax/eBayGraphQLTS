@@ -7,6 +7,11 @@ type Product {
     seller: Seller
 }
 
+type deleteProductRes {
+    id: ID!
+    deleted: Boolean!
+}
+
 type Seller {
     id: ID
     name: String
@@ -30,4 +35,5 @@ input UpdateProductInput {
 type Mutation {
     createProduct(pr: CreateProductInput!): Product!
     updateProduct(pr: UpdateProductInput!): Product!
+    deleteProduct(id: ID!): deleteProductRes!
 }
