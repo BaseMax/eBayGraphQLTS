@@ -344,10 +344,11 @@ query {
 
 ```graphql
 mutation {
-  updateProduct(id: "product123", input: {
+  updateProduct(input: {
     title: "iPhone 13 Pro",
     description: "The latest flagship smartphone from Apple.",
     price: 1099.99
+    productId: "id"
   }) {
     id
     title
@@ -454,7 +455,7 @@ query {
 mutation {
   deleteProduct(id: "product123") {
     id
-    title
+    deleted
   }
 }
 ```
