@@ -198,6 +198,36 @@ describe("AppController (e2e)", () => {
       productId = body.data.createProduct.id;
     });
 
+    it("should add product to cart", async () => {
+      const query = `
+      mutation cart {
+        addToCart(ac: {
+          productId: "${productId}"
+          quantity: 222
+        }) {
+          id
+          product {
+            id
+            title
+          }
+          quantity
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.addToCart).toHaveProperty("id");
+      expect(body.data.addToCart).toHaveProperty("quantity");
+      expect(body.data.addToCart).toHaveProperty("product");
+      expect(body.data.addToCart.product).toHaveProperty("id");
+      expect(body.data.addToCart.product).toHaveProperty("title");
+    });
+
     it("should place bid", async () => {
       const query = `
       mutation bids {
@@ -266,7 +296,7 @@ describe("AppController (e2e)", () => {
       expect(body.data.getBidsByUser.product.seller).toHaveProperty("name");
     });
 
-    it("should get one by product", async () => {
+    it("should get one bid by product id", async () => {
       const query = `
       query bid {
         getBidsByProduct(productId: "${productId}") {

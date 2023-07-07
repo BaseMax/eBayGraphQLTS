@@ -13,6 +13,7 @@ import { AuthenticationModule } from "./components/authentication/authentication
 import { ProductModule } from "./components/product/product.module";
 import { UserModule } from "./components/user/user.module";
 import { BidsModule } from "./components/bids/bids.module";
+import { CartModule } from "./components/cart/cart.module";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { BidsModule } from "./components/bids/bids.module";
     ProductModule,
     UserModule,
     BidsModule,
+    CartModule,
   ],
 })
 export class AppModule {}

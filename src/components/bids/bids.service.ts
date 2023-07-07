@@ -39,8 +39,13 @@ export class BidsService {
         userId: this.generateMongoId(userId),
       },
       {},
-      { populate: [{ path: "product", populate: { path: "seller" } }] },
+      {
+        populate: [
+          { path: "product", populate: { path: "seller" } },
+          { path: "userId" },
+        ],
+      },
     );
-    return bid;
+    return bid[0];
   }
 }
