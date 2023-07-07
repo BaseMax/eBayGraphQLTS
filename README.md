@@ -216,7 +216,9 @@ mutation {
 
 ```graphql
 mutation {
-  placeBid(productId: "product123", amount: 500.0) {
+  placeBid(pb: {
+    productId: "product123", amount: 500.0
+  }) {
     id
     amount
     product {

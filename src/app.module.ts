@@ -12,6 +12,7 @@ import { GraphQLError, GraphQLFormattedError } from "graphql";
 import { AuthenticationModule } from "./components/authentication/authentication.module";
 import { ProductModule } from "./components/product/product.module";
 import { UserModule } from "./components/user/user.module";
+import { BidsModule } from "./components/bids/bids.module";
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserModule } from "./components/user/user.module";
     AuthenticationModule,
     ProductModule,
     UserModule,
+    BidsModule,
   ],
 })
 export class AppModule {}

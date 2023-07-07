@@ -154,6 +154,8 @@ describe("AppController (e2e)", () => {
       name: defaultUser.name,
     };
 
+    let bidId: string;
+
     const productInfo = {
       title: "test name",
       price: 222,
@@ -192,6 +194,72 @@ describe("AppController (e2e)", () => {
       expect(body.data.createProduct.seller).toHaveProperty("name");
 
       productId = body.data.createProduct.id;
+    });
+
+    it("should place bid", async () => {
+      const query = `
+      mutation bids {
+        placeBids(pb: { amount: 55, productId: "${productId}"}) {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.placeBids).toHaveProperty("id");
+      expect(body.data.placeBids).toHaveProperty("amount");
+      expect(body.data.placeBids).toHaveProperty("product");
+      expect(body.data.placeBids.product).toHaveProperty("id");
+      expect(body.data.placeBids.product).toHaveProperty("title");
+      expect(body.data.placeBids.product.seller).toHaveProperty("id");
+      expect(body.data.placeBids.product.seller).toHaveProperty("name");
+      bidId = body.data.placeBids.id;
+    });
+
+    it("should get one by product", async () => {
+      const query = `
+      query bid {
+        getBidsByProduct(productId: "${productId}") {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getBidsByProduct).toHaveProperty("id");
+      expect(body.data.getBidsByProduct).toHaveProperty("amount");
+      expect(body.data.getBidsByProduct).toHaveProperty("product");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("id");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("title");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("seller");
+      expect(body.data.getBidsByProduct.product.seller).toHaveProperty("id");
+      expect(body.data.getBidsByProduct.product.seller).toHaveProperty("name");
     });
 
     it("should get one product", async () => {
