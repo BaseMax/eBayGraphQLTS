@@ -247,4 +247,26 @@ describe("AppController (e2e)", () => {
       expect(body.data.deleteProduct.deleted).toBeTruthy();
     });
   });
+
+  describe("user", () => {
+    it("should return user details", async () => {
+      const query = `
+      query user {
+        getUser {
+          name
+          id
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.getUser).toHaveProperty("id");
+      expect(body.data.getUser).toHaveProperty("name");
+    });
+  });
 });
