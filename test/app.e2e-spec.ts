@@ -228,6 +228,29 @@ describe("AppController (e2e)", () => {
       expect(body.data.addToCart.product).toHaveProperty("title");
     });
 
+    it("should return one product in cart", async () => {
+      const query = `
+      mutation cart {
+        getCartByUser(userId: "${defaultUserId}") {
+          id
+          quantity
+          product {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.addToCart).toHaveProperty("id");
+      expect(body.data.addToCart).toHaveProperty("quantity");
+      expect(body.data.addToCart).toHaveProperty("product");
+    });
+
     it("should place bid", async () => {
       const query = `
       mutation bids {

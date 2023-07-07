@@ -26,4 +26,17 @@ export class CartService {
     ]);
     return atc;
   }
+
+  public async getCartByUser(userId: string) {
+    return await this.cartModel.findOne(
+      { userId },
+      {},
+      {
+        populate: [
+          { path: "userId" },
+          { path: "product", populate: { path: "seller" } },
+        ],
+      },
+    );
+  }
 }

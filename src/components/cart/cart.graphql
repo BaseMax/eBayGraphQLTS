@@ -27,4 +27,5 @@ input AddToCartInput {
 # mutation
 type Mutation {
   addToCart(ac: AddToCartInput!): Cart!
+  getCartByUser(userId: ID!): [Cart]!
 }

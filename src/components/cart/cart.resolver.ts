@@ -14,4 +14,9 @@ export class CartResolver {
   ) {
     return await this.cartService.addToCart(ac, id);
   }
+
+  @Mutation("getCartByUser")
+  public async getCartByUser(@Args("userId") userId: string) {
+    return await this.cartService.getCartByUser(userId);
+  }
 }
