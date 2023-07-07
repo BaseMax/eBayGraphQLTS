@@ -145,7 +145,14 @@ describe("AppController (e2e)", () => {
   });
 
   describe("product", () => {
+    let defaultUserId: string;
     let productId: string;
+
+    const userToCreate = {
+      password: hashSync(defaultUser.password, 8),
+      email: defaultUser.email,
+      name: defaultUser.name,
+    };
 
     const productInfo = {
       title: "test name",
