@@ -47,4 +47,14 @@ export class ProductService {
       deleted: deletedCount >= 1 ? true : false,
     };
   }
+
+  public async getProduct(id: string) {
+    const pr = await this.productModel.findOne({ _id: id });
+    return pr;
+  }
+
+  public async searchProducts(title: string) {
+    const pr = await this.productModel.findOne({ title });
+    return pr;
+  }
 }

@@ -147,6 +147,12 @@ describe("AppController (e2e)", () => {
   describe("product", () => {
     let productId: string;
 
+    const productInfo = {
+      title: "test name",
+      price: 222,
+      description: "terrorist attack",
+    };
+
     it("should create product", async () => {
       const query = `
       mutation product($input: CreateProductInput!) {
@@ -161,11 +167,7 @@ describe("AppController (e2e)", () => {
       }
       `;
       const variables = {
-        input: {
-          title: "test name",
-          price: 222,
-          description: "terrorist attack",
-        },
+        input: productInfo,
       };
 
       const { status, body } = await request(app.getHttpServer())
@@ -183,6 +185,50 @@ describe("AppController (e2e)", () => {
       expect(body.data.createProduct.seller).toHaveProperty("name");
 
       productId = body.data.createProduct.id;
+    });
+
+    it("should get one product", async () => {
+      const query = `
+      query pr {
+        getProduct(id: "${productId}") {
+          id
+          seller {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getProduct).toHaveProperty("id");
+      expect(body.data.getProduct).toHaveProperty("seller");
+      expect(body.data.getProduct.seller).toHaveProperty("id");
+    });
+
+    it("should get one product with search parameter", async () => {
+      const query = `
+      query pr {
+        searchProducts(title: "${productInfo.title}") {
+          id
+          seller {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.searchProducts).toHaveProperty("id");
+      expect(body.data.searchProducts).toHaveProperty("seller");
+      expect(body.data.searchProducts.seller).toHaveProperty("id");
     });
 
     it("should update product", async () => {
