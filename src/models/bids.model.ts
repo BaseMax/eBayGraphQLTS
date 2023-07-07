@@ -29,6 +29,13 @@ class Bids extends Document {
     ref: "Product",
   })
   product: Types.ObjectId;
+
+  @Prop({
+    type: Types.ObjectId,
+    required: true,
+    ref: "User",
+  })
+  userId: Types.ObjectId;
 }
 
 const bidsSchema = SchemaFactory.createForClass(Bids);

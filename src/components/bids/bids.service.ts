@@ -13,11 +13,12 @@ export class BidsService {
     return new mongoose.Types.ObjectId(i);
   }
 
-  public async placeBids(pb: CreateBidInput) {
+  public async placeBids(pb: CreateBidInput, userId: string) {
     const p = await (
       await this.bidsModel.create({
         amount: pb.amount,
         product: this.generateMongoId(pb.productId),
+        userId: this.generateMongoId(userId),
       })
     ).populate([{ path: "product", populate: { path: "seller" } }]);
     return p;
@@ -26,6 +27,17 @@ export class BidsService {
   public async getBidsByProduct(productId: string) {
     const bid = await this.bidsModel.findOne(
       { product: this.generateMongoId(productId) },
+      {},
+      { populate: [{ path: "product", populate: { path: "seller" } }] },
+    );
+    return bid;
+  }
+
+  public async getBidsByUser(userId: string) {
+    const bid = await this.bidsModel.findOne(
+      {
+        userId: this.generateMongoId(userId),
+      },
       {},
       { populate: [{ path: "product", populate: { path: "seller" } }] },
     );

@@ -12,6 +12,8 @@ describe("AppController (e2e)", () => {
     password: "test",
   };
 
+  let defaultUserId: string;
+
   const accessTokens = {
     defaultUser: "",
   };
@@ -62,6 +64,7 @@ describe("AppController (e2e)", () => {
       .send({ query: mutation, variables: input });
 
     accessTokens.defaultUser = body.data.login.accessToken;
+    defaultUserId = body.data.login.user.id;
   };
 
   beforeAll(async () => {
@@ -145,7 +148,6 @@ describe("AppController (e2e)", () => {
   });
 
   describe("product", () => {
-    let defaultUserId: string;
     let productId: string;
 
     const userToCreate = {
@@ -216,7 +218,8 @@ describe("AppController (e2e)", () => {
 
       const { status, body } = await request(app.getHttpServer())
         .post("/graphql")
-        .send({ query });
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
 
       expect(status).toBe(200);
       expect(body.data.placeBids).toHaveProperty("id");
@@ -227,6 +230,40 @@ describe("AppController (e2e)", () => {
       expect(body.data.placeBids.product.seller).toHaveProperty("id");
       expect(body.data.placeBids.product.seller).toHaveProperty("name");
       bidId = body.data.placeBids.id;
+    });
+
+    it("should return bid by user id", async () => {
+      const query = `
+      query bid {
+        getBidsByUser(userId: "${defaultUserId}") {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getBidsByUser).toHaveProperty("id");
+      expect(body.data.getBidsByUser).toHaveProperty("amount");
+      expect(body.data.getBidsByUser).toHaveProperty("product");
+      expect(body.data.getBidsByUser.product).toHaveProperty("id");
+      expect(body.data.getBidsByUser.product).toHaveProperty("title");
+      expect(body.data.getBidsByUser.product).toHaveProperty("seller");
+      expect(body.data.getBidsByUser.product.seller).toHaveProperty("id");
+      expect(body.data.getBidsByUser.product.seller).toHaveProperty("name");
     });
 
     it("should get one by product", async () => {
