@@ -43,7 +43,6 @@ Note: Make sure you have MongoDB installed and running locally or provide the ap
 | `searchProducts(searchInput: String)` | Search for products based on a search query. |
 | `getBidsByUser(userId: ID!)` | Retrieve all bids made by a specific user. |
 | `getBidsByProduct(productId: ID!)` | Retrieve all bids made on a specific product. |
-| `getWinningBid(productId: ID!)` | Retrieve the winning bid for a specific product. |
 | `getCartByUser(userId: ID!)` | Retrieve the cart items for a specific user. |
 | `getOrdersByUser(userId: ID!)` | Retrieve all orders made by a specific user. |
 | `getOrdersByProduct(productId: ID!)` | Retrieve all orders made for a specific product. |
@@ -275,21 +274,6 @@ mutation {
     product {
       id
       title
-    }
-  }
-}
-```
-
-### `getWinningBid(productId: ID!)`
-
-```graphql
-query {
-  getWinningBid(productId: "product123") {
-    id
-    amount
-    bidder {
-      id
-      name
     }
   }
 }
