@@ -352,6 +352,23 @@ describe("AppController (e2e)", () => {
       expect(body.data.getCartByUser).toHaveProperty("product");
     });
 
+    it("should return count of the products in cart", async () => {
+      const query = `
+      mutation cart {
+        getCartCount(userId: "${defaultUserId}") {
+          itemCount
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getCartCount).toHaveProperty("itemCount");
+    });
+
     it("should get one product", async () => {
       const query = `
       query pr {

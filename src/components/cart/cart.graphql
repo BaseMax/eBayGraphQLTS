@@ -18,6 +18,10 @@ type Seller {
     name: String
 }
 
+type GetCartCountRes {
+  itemCount: Int!
+}
+
 # input
 input AddToCartInput {
   productId: ID!
@@ -28,4 +32,5 @@ input AddToCartInput {
 type Mutation {
   addToCart(ac: AddToCartInput!): Cart!
   getCartByUser(userId: ID!): Cart!
+  getCartCount(userId: ID!): GetCartCountRes!
 }

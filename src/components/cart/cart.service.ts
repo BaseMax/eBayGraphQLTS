@@ -39,4 +39,13 @@ export class CartService {
       },
     );
   }
+
+  public async getCartCount(userId: string) {
+    const itemCount = await this.cartModel
+      .find({ userId: this.generateMongoId(userId) })
+      .count();
+    return {
+      itemCount,
+    };
+  }
 }
