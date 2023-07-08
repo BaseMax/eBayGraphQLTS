@@ -74,7 +74,7 @@ Note: Make sure you have MongoDB installed and running locally or provide the ap
 | `deleteProduct(id: ID!)` | Delete a product listing by its ID. |
 | `placeBid(productId: ID!, amount: Float!)` | Place a bid on a specific product. |
 | `addToCart(userId: ID!, productId: ID!)` | Add a product to the cart for a specific user. |
-| `removeFromCart(userId: ID!, productId: ID!)` | Remove a product from the cart for a specific user. |
+| `removeFromCart(productId: ID!)` | Remove a product from the cart for a specific user. |
 | `checkout(userId: ID!)` | Proceed with the checkout process to complete an order. |
 | `leaveReview(productId: ID!, rating: Int!, comment: String!)` | Leave a review for a specific product. |
 | `updateShippingAddress(userId: ID!, input: AddressInput!)` | Update the shipping address for a specific user. |
@@ -352,7 +352,7 @@ mutation {
 
 ```graphql
 mutation {
-  removeFromCart(userId: "user123", productId: "product123") {
+  removeFromCart(productId: "product123") {
     id
     product {
       id

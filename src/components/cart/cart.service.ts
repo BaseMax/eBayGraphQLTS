@@ -48,4 +48,21 @@ export class CartService {
       itemCount,
     };
   }
+
+  public async removeFromCart(productId: string) {
+    const deletedProduct = await this.cartModel.findOneAndDelete(
+      {
+        product: this.generateMongoId(productId),
+      },
+      {
+        returnOriginal: false,
+        populate: [
+          { path: "userId" },
+          { path: "product", populate: { path: "seller" } },
+        ],
+      },
+    );
+
+    return deletedProduct;
+  }
 }

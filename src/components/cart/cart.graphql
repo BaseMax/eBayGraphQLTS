@@ -33,4 +33,5 @@ type Mutation {
   addToCart(ac: AddToCartInput!): Cart!
   getCartByUser(userId: ID!): Cart!
   getCartCount(userId: ID!): GetCartCountRes!
+  removeFromCart(productId: ID!): Cart!
 }

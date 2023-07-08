@@ -369,6 +369,32 @@ describe("AppController (e2e)", () => {
       expect(body.data.getCartCount).toHaveProperty("itemCount");
     });
 
+    it("should delete a product from cart and return that product", async () => {
+      const query = `
+      mutation cart {
+        removeFromCart(productId: "${productId}") {
+          id
+          product {
+            id
+            title
+          }
+          quantity
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.removeFromCart).toHaveProperty("id");
+      expect(body.data.removeFromCart).toHaveProperty("quantity");
+      expect(body.data.removeFromCart).toHaveProperty("product");
+      expect(body.data.removeFromCart.product).toHaveProperty("id");
+      expect(body.data.removeFromCart.product).toHaveProperty("title");
+    });
+
     it("should get one product", async () => {
       const query = `
       query pr {
