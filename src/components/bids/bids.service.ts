@@ -40,12 +40,9 @@ export class BidsService {
       },
       {},
       {
-        populate: [
-          { path: "product", populate: { path: "seller" } },
-          { path: "userId" },
-        ],
+        populate: [{ path: "product", populate: { path: "seller" } }],
       },
     );
-    return bid[0];
+    return bid;
   }
 }

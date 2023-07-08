@@ -29,7 +29,7 @@ export class CartService {
 
   public async getCartByUser(userId: string) {
     return await this.cartModel.findOne(
-      { userId },
+      { userId: this.generateMongoId(userId) },
       {},
       {
         populate: [
