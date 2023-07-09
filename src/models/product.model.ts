@@ -38,6 +38,11 @@ class Product extends Document {
     ref: "User",
   })
   seller: string;
+
+  @Prop({
+    type: Number,
+  })
+  view: number;
 }
 
 const productSchema = SchemaFactory.createForClass(Product);

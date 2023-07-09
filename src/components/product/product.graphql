@@ -17,6 +17,10 @@ type Seller {
     name: String
 }
 
+type GetProductReviewsRes {
+    view: Int
+}
+
 # inputs
 input CreateProductInput {
     title: String!
@@ -41,4 +45,6 @@ type Mutation {
     createProduct(pr: CreateProductInput!): Product!
     updateProduct(pr: UpdateProductInput!): Product!
     deleteProduct(id: ID!): deleteProductRes!
+    getSellerProducts(userId: ID!): Product!
+    getProductReviews(productId: ID!): GetProductReviewsRes!
 }

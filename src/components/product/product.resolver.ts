@@ -21,9 +21,19 @@ export class ProductResolver {
     return await this.productService.updateProduct(pr);
   }
 
+  @Mutation("getSellerProducts")
+  public async getSellerProducts(@Args("userId") userId: string) {
+    return await this.productService.getSellerProducts(userId);
+  }
+
   @Mutation("deleteProduct")
   public async deleteProduct(@Args("id") id: string) {
     return await this.productService.deleteProduct(id);
+  }
+
+  @Mutation("getProductReviews")
+  public async getProductReviews(@Args("productId") productIs: string) {
+    return await this.productService.getProductReviews(productIs);
   }
 
   @Query("getProduct")

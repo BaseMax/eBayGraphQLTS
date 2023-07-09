@@ -197,6 +197,37 @@ describe("AppController (e2e)", () => {
 
       productId = body.data.createProduct.id;
     });
+    it("should return seller product", async () => {
+      const query = `
+      mutation product {
+        getSellerProducts(userId: "${defaultUserId}") {
+          id
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+      expect(status).toBe(200);
+      expect(body.data.getSellerProducts).toHaveProperty("id");
+    });
+
+    it("should get product view", async () => {
+      const query = `
+      mutation product {
+        getProductReviews(productId: "${productId}") {
+          view
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+      expect(status).toBe(200);
+      expect(body.data.getProductReviews).toHaveProperty("view");
+    });
 
     it("should make order", async () => {
       const query = `
