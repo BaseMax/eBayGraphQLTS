@@ -14,6 +14,7 @@ import { ProductModule } from "./components/product/product.module";
 import { UserModule } from "./components/user/user.module";
 import { BidsModule } from "./components/bids/bids.module";
 import { CartModule } from "./components/cart/cart.module";
+import { OrderModule } from "./components/order/order.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CartModule } from "./components/cart/cart.module";
     UserModule,
     BidsModule,
     CartModule,
+    OrderModule,
   ],
 })
 export class AppModule {}

@@ -69,6 +69,7 @@ Note: Make sure you have MongoDB installed and running locally or provide the ap
 | `getUnreadNotificationCount(userId: ID!)` | Retrieve the number of unread notifications for a specific user. |
 | `registerUser(input: UserInput!)` | Register a new user with the provided details. |
 | `loginUser(email: String!, password: String!)` | Authenticate a user and generate an access token. |
+| `loginUser(productId: ID!, totalAmount: Int!)` | make order |
 | `createProduct(input: ProductInput!)` | Create a new product listing with the provided details. |
 | `updateProduct(id: ID!, input: ProductInput!)` | Update an existing product listing with the provided details. |
 | `deleteProduct(id: ID!)` | Delete a product listing by its ID. |

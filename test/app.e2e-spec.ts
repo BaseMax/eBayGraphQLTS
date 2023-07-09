@@ -198,6 +198,84 @@ describe("AppController (e2e)", () => {
       productId = body.data.createProduct.id;
     });
 
+    it("should make order", async () => {
+      const query = `
+      mutation order {
+        makeOrder(productId: "${productId}", totalAmount: 22) {
+          totalAmount
+          product {
+            id
+          }
+          userId {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.makeOrder).toHaveProperty("totalAmount");
+      expect(body.data.makeOrder).toHaveProperty("product");
+      expect(body.data.makeOrder).toHaveProperty("userId");
+    });
+
+    it("should get order by product id", async () => {
+      const query = `
+      mutation order {
+        getOrderByProduct(productId: "${productId}") {
+          totalAmount
+          product {
+            id
+          }
+          userId {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.getOrderByProduct).toHaveProperty("totalAmount");
+      expect(body.data.getOrderByProduct).toHaveProperty("product");
+      expect(body.data.getOrderByProduct).toHaveProperty("userId");
+    });
+
+    it("should get order by product user Id", async () => {
+      const query = `
+      mutation order {
+        getOrderByUser(userId: "${defaultUserId}") {
+          totalAmount
+          product {
+            id
+          }
+          userId {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.getOrderByUser).toHaveProperty("totalAmount");
+      expect(body.data.getOrderByUser).toHaveProperty("product");
+      expect(body.data.getOrderByUser).toHaveProperty("userId");
+    });
+
     it("should place bid", async () => {
       const query = `
       mutation bids {
