@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
 import { AppModule } from "./../src/app.module";
-import { connect, Model, model, Schema } from "mongoose";
+import mongoose, { connect, Model, model, Schema } from "mongoose";
 import { hashSync } from "bcrypt";
 
 describe("AppController (e2e)", () => {
@@ -14,6 +14,7 @@ describe("AppController (e2e)", () => {
 
   let defaultUserId: string;
 
+  const notificationId: string[] = [];
   const accessTokens = {
     defaultUser: "",
   };
@@ -22,6 +23,7 @@ describe("AppController (e2e)", () => {
 
   // models
   let userModel: Model<any>;
+  let notifModel: Model<any>;
 
   const generateUser = async () => {
     const newPass = hashSync(defaultUser.password, 8);
@@ -36,7 +38,7 @@ describe("AppController (e2e)", () => {
     await connect("mongodb://127.0.0.1:27017/ebay");
 
     userModel = model("user", new Schema({}, { strict: false }));
-
+    notifModel = model("notifications", new Schema({}, { strict: false }));
     await generateUser();
   });
 
@@ -77,6 +79,16 @@ describe("AppController (e2e)", () => {
     await app.init();
 
     await loginDefaultUser();
+
+    for (let i = 0; i < 3; i++) {
+      const notif = await notifModel.create({
+        userId: new mongoose.Types.ObjectId(defaultUserId),
+        content: "this is test message",
+        isread: false,
+        title: "hello max",
+      });
+      notificationId.push(notif._id);
+    }
   });
 
   describe("authentication", () => {
@@ -608,6 +620,82 @@ describe("AppController (e2e)", () => {
       expect(body.data.deleteProduct).toHaveProperty("id");
       expect(body.data.deleteProduct).toHaveProperty("deleted");
       expect(body.data.deleteProduct.deleted).toBeTruthy();
+    });
+  });
+
+  describe("notification", () => {
+    it("should return one notification", async () => {
+      const query = `
+      mutation notif {
+        getNotifications(userId: "${defaultUserId}"){ 
+          id
+          content
+        }
+      } 
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getNotifications).toHaveProperty("id");
+      expect(body.data.getNotifications).toHaveProperty("content");
+    });
+
+    it("should return unread notifications", async () => {
+      const query = `
+      query notif {
+        getUnreadNotificationCount { 
+          count
+        }
+      } 
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getUnreadNotificationCount).toHaveProperty("count");
+    });
+
+    it("should mark notification as read", async () => {
+      const query = `
+      mutation notif {
+        markNotificationAsRead(userId: "${defaultUserId}", notificationId: "${notificationId.pop()}") { 
+          id
+          isread
+        }
+      } 
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.markNotificationAsRead).toHaveProperty("id");
+      expect(body.data.markNotificationAsRead).toHaveProperty("isread");
+    });
+
+    it("should mark all notification as read for specific user id", async () => {
+      const query = `
+      mutation notif {
+        markAllNotificationsAsRead(userId: "${defaultUserId}") { 
+          id
+          isread
+        }
+      } 
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.markAllNotificationsAsRead).toHaveProperty("id");
+      expect(body.data.markAllNotificationsAsRead).toHaveProperty("isread");
     });
   });
 
