@@ -54,4 +54,10 @@ export class OrderService {
     ]);
     return order;
   }
+
+  public async getShippingAddress(userId: string) {
+    return await this.orderModel.findOne({
+      userId: this.generateMongoId(userId),
+    });
+  }
 }

@@ -1,8 +1,10 @@
 # type
 type Order {
+  id: ID
   product: Product
   userId: User
   totalAmount: Int
+  shippingAddress: String
 }
 
 type Product {
@@ -23,4 +25,5 @@ type Mutation {
   makeOrder(productId: ID!, totalAmount: Int!): Order!
   getOrderByProduct(productId: ID!): Order!
   getOrderByUser(userId: ID!): Order!
+  getShippingAddress(userId: ID!): Order!
 }

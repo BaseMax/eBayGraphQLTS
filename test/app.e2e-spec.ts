@@ -267,6 +267,24 @@ describe("AppController (e2e)", () => {
       expect(body.data.makeOrder).toHaveProperty("userId");
     });
 
+    it("should return order shipping addres", async () => {
+      const query = `
+     mutation order {
+      getShippingAddress(userId: "${defaultUserId}") {
+        id
+        shippingAddress
+      }
+     }
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getShippingAddress).toHaveProperty("id");
+      expect(body.data.getShippingAddress).toHaveProperty("shippingAddress");
+    });
+
     it("should get order by product id", async () => {
       const query = `
       mutation order {

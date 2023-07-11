@@ -24,4 +24,9 @@ export class OrderResolver {
   public async getOrderByUser(@Args("userId") userId: string) {
     return await this.orderService.getOrderByUser(userId);
   }
+
+  @Mutation("getShippingAddress")
+  public async getShippingAddress(@Args("userId") userId: string) {
+    return await this.orderService.getShippingAddress(userId);
+  }
 }
