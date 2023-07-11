@@ -7,6 +7,20 @@ type Order {
   shippingAddress: String
 }
 
+type Shipping {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+}
+
+type Billing {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+}
+
 type Product {
     title: String
     id: ID
@@ -20,10 +34,25 @@ type Seller {
     name: String
 }
 
+#input 
+input CreateShippingAddres {
+  userId: ID
+  street: String
+  city: String
+  state: String
+  zipCode: String
+}
 # mutation
 type Mutation {
   makeOrder(productId: ID!, totalAmount: Int!): Order!
   getOrderByProduct(productId: ID!): Order!
   getOrderByUser(userId: ID!): Order!
-  getShippingAddress(userId: ID!): Order!
+
+  getShippingAddress(userId: ID!): Shipping!
+  updateShippingAddress(csa: CreateShippingAddres!): Shipping!
+  createShippingAddress(csa: CreateShippingAddres!): Shipping!
+
+  getBillingAddress(userId: ID!): Billing!
+  updateBillingAddress(csa: CreateBillingAddres!): Billing!
+  createBillingAddress(csa: CreateBillingAddres!): Billing!
 }

@@ -455,12 +455,10 @@ mutation {
     zipCode: "90001"
   }) {
     id
-    billingAddress {
       street
       city
       state
       zipCode
-    }
   }
 }
 ```
