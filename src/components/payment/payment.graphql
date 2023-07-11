@@ -1,0 +1,28 @@
+# type 
+type Payment {
+  userId: User
+  id: ID
+  type: String
+  cardNumber: Int
+}
+
+type User {
+  id: String!
+  name: String
+}
+
+# input 
+input AddPaymentMethodInput {
+  type: String!
+  cardNumber: String!
+  expirationDate: String!
+  cvv: String!
+  userId: ID!
+}
+
+# mutation 
+type Mutation {
+  addPaymentMethod(adm: AddPaymentMethodInput!): Payment!
+  getPaymentMethods(userId: ID!): Payment!
+  deletePaymentMethod(userId: ID!, paymentId: ID!): Payment!
+}
