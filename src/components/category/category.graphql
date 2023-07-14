@@ -1,0 +1,22 @@
+# types 
+type AllCategory {
+  id: ID
+  name: String
+  subCategory: Category
+}
+
+type Category {
+  id: ID
+  name: String
+}
+
+# query
+type Query {
+  getCategories(): AllCategory!
+  getSubcategories(subCatId: String): AllCategory
+}
+
+# mutation 
+type Mutation {
+  addCategory(catName: String!, subCategory: ID!): AllCategory!
+}

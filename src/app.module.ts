@@ -17,6 +17,7 @@ import { CartModule } from "./components/cart/cart.module";
 import { OrderModule } from "./components/order/order.module";
 import { NotificationModule } from "./components/notification/notification.module";
 import { PaymentModule } from "./components/payment/payment.module";
+import { CategoryModule } from "./components/category/category.module";
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { PaymentModule } from "./components/payment/payment.module";
     OrderModule,
     NotificationModule,
     PaymentModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

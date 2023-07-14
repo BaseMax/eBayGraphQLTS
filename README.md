@@ -619,18 +619,6 @@ query {
 }
 ```
 
-### `getCategoryProducts(categoryId: ID!)`
-
-```graphql
-query {
-  getCategoryProducts(categoryId: "category123") {
-    id
-    title
-    price
-  }
-}
-```
-
 ### `updateUser(id: ID!, input: UserInput!)`
 
 ```graphql
