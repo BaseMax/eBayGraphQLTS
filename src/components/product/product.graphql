@@ -1,0 +1,39 @@
+# types
+type Product {
+    title: String
+    id: ID
+    description: String
+    price: Int
+    seller: Seller
+}
+
+type deleteProductRes {
+    id: ID!
+    deleted: Boolean!
+}
+
+type Seller {
+    id: ID
+    name: String
+}
+
+# inputs
+input CreateProductInput {
+    title: String!
+    description: String!
+    price: Int!
+}
+
+input UpdateProductInput {
+    title: String
+    description: String
+    price: Int
+    productId: ID!
+}
+# mutations
+
+type Mutation {
+    createProduct(pr: CreateProductInput!): Product!
+    updateProduct(pr: UpdateProductInput!): Product!
+    deleteProduct(id: ID!): deleteProductRes!
+}

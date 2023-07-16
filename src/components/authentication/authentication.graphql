@@ -1,0 +1,36 @@
+# types
+type Authentication {
+  user: newUser
+  accessToken: String
+  message: String!
+  accepted: Boolean!
+}
+
+type newUser {
+  id: ID!
+  email: String!
+  name: String!
+  createdAt: String!
+}
+
+# inputs
+input registerInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+input loginInput {
+  email: String!
+  password: String!
+}
+
+# query
+type Query {
+  _null: String!
+}
+
+type Mutation {
+  register(ri: registerInput!): Authentication!
+  login(ri: loginInput!): Authentication!
+}
