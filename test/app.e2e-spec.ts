@@ -198,59 +198,6 @@ describe("AppController (e2e)", () => {
       productId = body.data.createProduct.id;
     });
 
-    it("should add product to cart", async () => {
-      const query = `
-      mutation cart {
-        addToCart(ac: {
-          productId: "${productId}"
-          quantity: 222
-        }) {
-          id
-          product {
-            id
-            title
-          }
-          quantity
-        }
-      }
-      `;
-
-      const { status, body } = await request(app.getHttpServer())
-        .post("/graphql")
-        .send({ query })
-        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
-
-      expect(status).toBe(200);
-      expect(body.data.addToCart).toHaveProperty("id");
-      expect(body.data.addToCart).toHaveProperty("quantity");
-      expect(body.data.addToCart).toHaveProperty("product");
-      expect(body.data.addToCart.product).toHaveProperty("id");
-      expect(body.data.addToCart.product).toHaveProperty("title");
-    });
-
-    it("should return one product in cart", async () => {
-      const query = `
-      mutation cart {
-        getCartByUser(userId: "${defaultUserId}") {
-          id
-          quantity
-          product {
-            id
-          }
-        }
-      }
-      `;
-
-      const { status, body } = await request(app.getHttpServer())
-        .post("/graphql")
-        .send({ query });
-
-      expect(status).toBe(200);
-      expect(body.data.addToCart).toHaveProperty("id");
-      expect(body.data.addToCart).toHaveProperty("quantity");
-      expect(body.data.addToCart).toHaveProperty("product");
-    });
-
     it("should place bid", async () => {
       const query = `
       mutation bids {
@@ -350,6 +297,102 @@ describe("AppController (e2e)", () => {
       expect(body.data.getBidsByProduct.product).toHaveProperty("seller");
       expect(body.data.getBidsByProduct.product.seller).toHaveProperty("id");
       expect(body.data.getBidsByProduct.product.seller).toHaveProperty("name");
+    });
+
+    it("should add product to cart", async () => {
+      const query = `
+      mutation cart {
+        addToCart(ac: {
+          productId: "${productId}"
+          quantity: 222
+        }) {
+          id
+          product {
+            id
+            title
+          }
+          quantity
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.addToCart).toHaveProperty("id");
+      expect(body.data.addToCart).toHaveProperty("quantity");
+      expect(body.data.addToCart).toHaveProperty("product");
+      expect(body.data.addToCart.product).toHaveProperty("id");
+      expect(body.data.addToCart.product).toHaveProperty("title");
+    });
+
+    it("should return one product in cart", async () => {
+      const query = `
+      mutation cart {
+        getCartByUser(userId: "${defaultUserId}") {
+          id
+          quantity
+          product {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getCartByUser).toHaveProperty("id");
+      expect(body.data.getCartByUser).toHaveProperty("quantity");
+      expect(body.data.getCartByUser).toHaveProperty("product");
+    });
+
+    it("should return count of the products in cart", async () => {
+      const query = `
+      mutation cart {
+        getCartCount(userId: "${defaultUserId}") {
+          itemCount
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getCartCount).toHaveProperty("itemCount");
+    });
+
+    it("should delete a product from cart and return that product", async () => {
+      const query = `
+      mutation cart {
+        removeFromCart(productId: "${productId}") {
+          id
+          product {
+            id
+            title
+          }
+          quantity
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.removeFromCart).toHaveProperty("id");
+      expect(body.data.removeFromCart).toHaveProperty("quantity");
+      expect(body.data.removeFromCart).toHaveProperty("product");
+      expect(body.data.removeFromCart.product).toHaveProperty("id");
+      expect(body.data.removeFromCart.product).toHaveProperty("title");
     });
 
     it("should get one product", async () => {

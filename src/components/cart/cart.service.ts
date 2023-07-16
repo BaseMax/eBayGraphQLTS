@@ -29,7 +29,7 @@ export class CartService {
 
   public async getCartByUser(userId: string) {
     return await this.cartModel.findOne(
-      { userId },
+      { userId: this.generateMongoId(userId) },
       {},
       {
         populate: [
@@ -38,5 +38,31 @@ export class CartService {
         ],
       },
     );
+  }
+
+  public async getCartCount(userId: string) {
+    const itemCount = await this.cartModel
+      .find({ userId: this.generateMongoId(userId) })
+      .count();
+    return {
+      itemCount,
+    };
+  }
+
+  public async removeFromCart(productId: string) {
+    const deletedProduct = await this.cartModel.findOneAndDelete(
+      {
+        product: this.generateMongoId(productId),
+      },
+      {
+        returnOriginal: false,
+        populate: [
+          { path: "userId" },
+          { path: "product", populate: { path: "seller" } },
+        ],
+      },
+    );
+
+    return deletedProduct;
   }
 }

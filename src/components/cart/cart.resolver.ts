@@ -19,4 +19,14 @@ export class CartResolver {
   public async getCartByUser(@Args("userId") userId: string) {
     return await this.cartService.getCartByUser(userId);
   }
+
+  @Mutation("getCartCount")
+  public async getCartCount(@Args("userId") userId: string) {
+    return await this.cartService.getCartCount(userId);
+  }
+
+  @Mutation("removeFromCart")
+  public async removeFromCart(@Args("productId") productId: string) {
+    return await this.cartService.removeFromCart(productId);
+  }
 }

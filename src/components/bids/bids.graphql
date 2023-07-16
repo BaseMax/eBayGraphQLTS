@@ -3,7 +3,11 @@ type Bid {
   id: ID
   amount: Int
   product: Product
-  userId: String
+}
+
+type User {
+  id: String
+  name: String
 }
 
 type Product {
