@@ -34,6 +34,7 @@ export class PaymentResolver {
 
   @Get("/done")
   public async donePayment(@Req() req: Request, @Res() res: Response) {
-    return await this.paymentService.donePayment(req.body);
+    const dp = await this.paymentService.donePayment(req.body);
+    return res.json(dp);
   }
 }
