@@ -1,0 +1,26 @@
+# type
+type Order {
+  product: Product
+  userId: User
+  totalAmount: Int
+}
+
+type Product {
+    title: String
+    id: ID
+    description: String
+    price: Int
+    seller: Seller
+}
+
+type Seller {
+    id: ID
+    name: String
+}
+
+# mutation
+type Mutation {
+  makeOrder(productId: ID!, totalAmount: Int!): Order!
+  getOrderByProduct(productId: ID!): Order!
+  getOrderByUser(userId: ID!): Order!
+}

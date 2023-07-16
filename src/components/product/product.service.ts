@@ -57,4 +57,22 @@ export class ProductService {
     const pr = await this.productModel.findOne({ title });
     return pr;
   }
+
+  public async getSellerProducts(userId: string) {
+    const product = await this.productModel.findOne(
+      {
+        seller: this.generateMongoId(userId),
+      },
+      {},
+      { populate: [{ path: "seller" }] },
+    );
+
+    return product;
+  }
+
+  public async getProductReviews(productId: string) {
+    return await this.productModel.findOne({
+      _id: this.generateMongoId(productId),
+    });
+  }
 }
