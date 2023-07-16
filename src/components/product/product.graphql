@@ -30,8 +30,13 @@ input UpdateProductInput {
     price: Int
     productId: ID!
 }
-# mutations
+# query 
+type Query {
+    getProduct(id: ID!): Product!
+    searchProducts(title: String!): Product!
+}
 
+# mutations
 type Mutation {
     createProduct(pr: CreateProductInput!): Product!
     updateProduct(pr: UpdateProductInput!): Product!

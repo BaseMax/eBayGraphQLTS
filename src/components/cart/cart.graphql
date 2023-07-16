@@ -1,0 +1,31 @@
+# type
+type Cart {
+  id: ID
+  product: Product
+  quantity: Int
+}
+
+type Product {
+    title: String
+    id: ID
+    description: String
+    price: Int
+    seller: Seller
+}
+
+type Seller {
+    id: ID
+    name: String
+}
+
+# input
+input AddToCartInput {
+  productId: ID!
+  quantity: Int!
+}
+
+# mutation
+type Mutation {
+  addToCart(ac: AddToCartInput!): Cart!
+  getCartByUser(userId: ID!): [Cart]!
+}

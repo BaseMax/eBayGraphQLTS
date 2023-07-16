@@ -12,6 +12,8 @@ describe("AppController (e2e)", () => {
     password: "test",
   };
 
+  let defaultUserId: string;
+
   const accessTokens = {
     defaultUser: "",
   };
@@ -62,6 +64,7 @@ describe("AppController (e2e)", () => {
       .send({ query: mutation, variables: input });
 
     accessTokens.defaultUser = body.data.login.accessToken;
+    defaultUserId = body.data.login.user.id;
   };
 
   beforeAll(async () => {
@@ -147,6 +150,20 @@ describe("AppController (e2e)", () => {
   describe("product", () => {
     let productId: string;
 
+    const userToCreate = {
+      password: hashSync(defaultUser.password, 8),
+      email: defaultUser.email,
+      name: defaultUser.name,
+    };
+
+    let bidId: string;
+
+    const productInfo = {
+      title: "test name",
+      price: 222,
+      description: "terrorist attack",
+    };
+
     it("should create product", async () => {
       const query = `
       mutation product($input: CreateProductInput!) {
@@ -161,11 +178,7 @@ describe("AppController (e2e)", () => {
       }
       `;
       const variables = {
-        input: {
-          title: "test name",
-          price: 222,
-          description: "terrorist attack",
-        },
+        input: productInfo,
       };
 
       const { status, body } = await request(app.getHttpServer())
@@ -183,6 +196,204 @@ describe("AppController (e2e)", () => {
       expect(body.data.createProduct.seller).toHaveProperty("name");
 
       productId = body.data.createProduct.id;
+    });
+
+    it("should add product to cart", async () => {
+      const query = `
+      mutation cart {
+        addToCart(ac: {
+          productId: "${productId}"
+          quantity: 222
+        }) {
+          id
+          product {
+            id
+            title
+          }
+          quantity
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.addToCart).toHaveProperty("id");
+      expect(body.data.addToCart).toHaveProperty("quantity");
+      expect(body.data.addToCart).toHaveProperty("product");
+      expect(body.data.addToCart.product).toHaveProperty("id");
+      expect(body.data.addToCart.product).toHaveProperty("title");
+    });
+
+    it("should return one product in cart", async () => {
+      const query = `
+      mutation cart {
+        getCartByUser(userId: "${defaultUserId}") {
+          id
+          quantity
+          product {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.addToCart).toHaveProperty("id");
+      expect(body.data.addToCart).toHaveProperty("quantity");
+      expect(body.data.addToCart).toHaveProperty("product");
+    });
+
+    it("should place bid", async () => {
+      const query = `
+      mutation bids {
+        placeBids(pb: { amount: 55, productId: "${productId}"}) {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.placeBids).toHaveProperty("id");
+      expect(body.data.placeBids).toHaveProperty("amount");
+      expect(body.data.placeBids).toHaveProperty("product");
+      expect(body.data.placeBids.product).toHaveProperty("id");
+      expect(body.data.placeBids.product).toHaveProperty("title");
+      expect(body.data.placeBids.product.seller).toHaveProperty("id");
+      expect(body.data.placeBids.product.seller).toHaveProperty("name");
+      bidId = body.data.placeBids.id;
+    });
+
+    it("should return bid by user id", async () => {
+      const query = `
+      query bid {
+        getBidsByUser(userId: "${defaultUserId}") {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getBidsByUser).toHaveProperty("id");
+      expect(body.data.getBidsByUser).toHaveProperty("amount");
+      expect(body.data.getBidsByUser).toHaveProperty("product");
+      expect(body.data.getBidsByUser.product).toHaveProperty("id");
+      expect(body.data.getBidsByUser.product).toHaveProperty("title");
+      expect(body.data.getBidsByUser.product).toHaveProperty("seller");
+      expect(body.data.getBidsByUser.product.seller).toHaveProperty("id");
+      expect(body.data.getBidsByUser.product.seller).toHaveProperty("name");
+    });
+
+    it("should get one bid by product id", async () => {
+      const query = `
+      query bid {
+        getBidsByProduct(productId: "${productId}") {
+          id
+          amount
+          product {
+            id
+            title
+            seller {
+              id
+              name
+            }
+          }
+        }
+      }
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getBidsByProduct).toHaveProperty("id");
+      expect(body.data.getBidsByProduct).toHaveProperty("amount");
+      expect(body.data.getBidsByProduct).toHaveProperty("product");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("id");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("title");
+      expect(body.data.getBidsByProduct.product).toHaveProperty("seller");
+      expect(body.data.getBidsByProduct.product.seller).toHaveProperty("id");
+      expect(body.data.getBidsByProduct.product.seller).toHaveProperty("name");
+    });
+
+    it("should get one product", async () => {
+      const query = `
+      query pr {
+        getProduct(id: "${productId}") {
+          id
+          seller {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getProduct).toHaveProperty("id");
+      expect(body.data.getProduct).toHaveProperty("seller");
+      expect(body.data.getProduct.seller).toHaveProperty("id");
+    });
+
+    it("should get one product with search parameter", async () => {
+      const query = `
+      query pr {
+        searchProducts(title: "${productInfo.title}") {
+          id
+          seller {
+            id
+          }
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.searchProducts).toHaveProperty("id");
+      expect(body.data.searchProducts).toHaveProperty("seller");
+      expect(body.data.searchProducts.seller).toHaveProperty("id");
     });
 
     it("should update product", async () => {
@@ -245,6 +456,28 @@ describe("AppController (e2e)", () => {
       expect(body.data.deleteProduct).toHaveProperty("id");
       expect(body.data.deleteProduct).toHaveProperty("deleted");
       expect(body.data.deleteProduct.deleted).toBeTruthy();
+    });
+  });
+
+  describe("user", () => {
+    it("should return user details", async () => {
+      const query = `
+      query user {
+        getUser {
+          name
+          id
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query })
+        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
+
+      expect(status).toBe(200);
+      expect(body.data.getUser).toHaveProperty("id");
+      expect(body.data.getUser).toHaveProperty("name");
     });
   });
 });

@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Mutation, Args, Query } from "@nestjs/graphql";
 import { ProductService } from "./product.service";
 import { CreateProductInput } from "./dto/create-product.input";
 import User, { Iuser } from "../../decorator/user.decorator";
@@ -24,5 +24,15 @@ export class ProductResolver {
   @Mutation("deleteProduct")
   public async deleteProduct(@Args("id") id: string) {
     return await this.productService.deleteProduct(id);
+  }
+
+  @Query("getProduct")
+  public async getProduct(@Args("id") id: string) {
+    return await this.productService.getProduct(id);
+  }
+
+  @Query("searchProducts")
+  public async searchProducts(@Args("title") t: string) {
+    return await this.productService.searchProducts(t);
   }
 }

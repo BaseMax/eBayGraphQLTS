@@ -1,0 +1,11 @@
+# types
+type User {
+  id: String
+  name: String
+  email: String
+}
+
+# query
+type Query {
+  getUser: User
+}
