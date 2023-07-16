@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from "@nestjs/graphql";
+import { Resolver, Mutation, Args, Query } from "@nestjs/graphql";
 import User, { Iuser } from "../../decorator/user.decorator";
 import { OrderService } from "./order.service";
 
@@ -59,5 +59,10 @@ export class OrderResolver {
   @Mutation("createBillingAddress")
   public async createBillingAddress(@Args("csa") csa: Record<any, any>) {
     return await this.orderService.createBillingAddress(csa);
+  }
+
+  @Query("getOrderCount")
+  public async getOrderCount() {
+    return await this.orderService.getOrderCount();
   }
 }

@@ -13,4 +13,11 @@ export class UserService {
     const user = await this.userModel.findOne({ _id: id });
     return user;
   }
+
+  public async getUserCount() {
+    const userCount = await this.userModel.find().count();
+    return {
+      count: userCount,
+    };
+  }
 }

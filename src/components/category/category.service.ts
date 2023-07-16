@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { Model } from "mongoose";
-import { Category } from "src/models/category.model";
+import { Category } from "../../models/category.model";
 
 @Injectable()
 export class CategoryService {
@@ -25,6 +25,14 @@ export class CategoryService {
   public async getSubcategories(catId?: string) {
     return await this.categoryModel.find(
       { _id: this.generateMongoId(catId) },
+      {},
+      { populate: [{ path: "subCategory" }] },
+    );
+  }
+
+  public async getCategories() {
+    return await this.categoryModel.find(
+      {},
       {},
       { populate: [{ path: "subCategory" }] },
     );

@@ -45,4 +45,19 @@ export class ProductResolver {
   public async searchProducts(@Args("title") t: string) {
     return await this.productService.searchProducts(t);
   }
+
+  @Query("getTrendingProducts")
+  public async getTrendingProducts() {
+    return await this.productService.getTrendingProducts();
+  }
+
+  @Query("getFeaturedProducts")
+  public async getFeaturedProducts() {
+    return await this.productService.getFeaturedProducts();
+  }
+
+  @Query("getProductCount")
+  public async getProductCount() {
+    return await this.productService.getProductCount();
+  }
 }

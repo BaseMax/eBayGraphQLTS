@@ -34,8 +34,25 @@ type Seller {
     name: String
 }
 
+type GetOrderCountRes {
+  count: Int!
+}
+
+# query
+type Query {
+  getOrderCount: GetOrderCountRes!
+}
+
 #input 
 input CreateShippingAddres {
+  userId: ID
+  street: String
+  city: String
+  state: String
+  zipCode: String
+}
+
+input CreateBillingAddres {
   userId: ID
   street: String
   city: String

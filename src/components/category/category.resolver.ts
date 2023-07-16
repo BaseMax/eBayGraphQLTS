@@ -17,4 +17,9 @@ export class CategoryResolver {
   public async getSubcategories(@Args("subCatId") subCatId: string) {
     return await this.categoryService.getSubcategories(subCatId);
   }
+
+  @Query("getCategories")
+  public async getCategories() {
+    return await this.categoryService.getCategories();
+  }
 }

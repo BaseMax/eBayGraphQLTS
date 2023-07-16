@@ -96,4 +96,11 @@ export class OrderService {
     csa.userId = this.generateMongoId(csa.userId);
     return await this.billingModel.create(csa);
   }
+
+  public async getOrderCount() {
+    const orderCount = await this.orderModel.find().count();
+    return {
+      count: orderCount,
+    };
+  }
 }

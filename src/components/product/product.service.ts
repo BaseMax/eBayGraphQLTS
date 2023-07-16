@@ -75,4 +75,23 @@ export class ProductService {
       _id: this.generateMongoId(productId),
     });
   }
+
+  public async getTrendingProducts() {
+    return await this.productModel.find({}).sort({ view: 1 });
+  }
+
+  public async getRecentProducts() {
+    return await this.productModel.find({});
+  }
+
+  public async getFeaturedProducts() {
+    return await this.productModel.find({ isfeatured: true });
+  }
+
+  public async getProductCount() {
+    const prCount = await this.productModel.find().count();
+    return {
+      count: prCount,
+    };
+  }
 }

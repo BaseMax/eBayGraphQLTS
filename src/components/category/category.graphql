@@ -12,8 +12,8 @@ type Category {
 
 # query
 type Query {
-  getCategories(): AllCategory!
-  getSubcategories(subCatId: String): AllCategory
+  getCategories: AllCategory!
+  getSubcategories(subCatId: String): AllCategory!
 }
 
 # mutation 

@@ -5,7 +5,12 @@ type User {
   email: String
 }
 
+type GetUserCountRes {
+  count: Int!
+}
+
 # query
 type Query {
   getUser: User
+  getUserCount: GetUserCountRes
 }

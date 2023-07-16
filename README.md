@@ -55,7 +55,6 @@ Note: Make sure you have MongoDB installed and running locally or provide the ap
 | `getCategories` | Retrieve a list of available product categories. |
 | `getSubcategories(categoryId: ID!)` | Retrieve all subcategories under a specific category. |
 | `getTrendingProducts` | Retrieve a list of trending products based on popularity. |
-| `getRecommendedProducts(userId: ID!)` | Retrieve a list of recommended products for a specific user. |
 | `getPopularProducts` | Retrieve a list of popular products based on sales and ratings. |
 | `getRecentProducts` | Retrieve a list of recently added products. |
 | `getFeaturedProducts` | Retrieve a list of featured products. |

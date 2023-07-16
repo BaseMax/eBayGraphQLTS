@@ -43,6 +43,12 @@ class Product extends Document {
     type: Number,
   })
   view: number;
+
+  @Prop({
+    type: Boolean,
+    default: true,
+  })
+  isfeatured: boolean;
 }
 
 const productSchema = SchemaFactory.createForClass(Product);

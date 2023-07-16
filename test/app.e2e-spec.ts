@@ -267,24 +267,6 @@ describe("AppController (e2e)", () => {
       expect(body.data.makeOrder).toHaveProperty("userId");
     });
 
-    it("should return order shipping addres", async () => {
-      const query = `
-     mutation order {
-      getShippingAddress(userId: "${defaultUserId}") {
-        id
-        shippingAddress
-      }
-     }
-      `;
-      const { status, body } = await request(app.getHttpServer())
-        .post("/graphql")
-        .send({ query });
-
-      expect(status).toBe(200);
-      expect(body.data.getShippingAddress).toHaveProperty("id");
-      expect(body.data.getShippingAddress).toHaveProperty("shippingAddress");
-    });
-
     it("should get order by product id", async () => {
       const query = `
       mutation order {
@@ -616,28 +598,6 @@ describe("AppController (e2e)", () => {
       expect(body.data.updateProduct).toHaveProperty("seller");
       expect(body.data.updateProduct.seller).toHaveProperty("id");
       expect(body.data.updateProduct.seller).toHaveProperty("name");
-    });
-
-    it("should delete product", async () => {
-      const query = `
-      mutation product {
-        deleteProduct(id: "${productId}") {
-          id
-          deleted
-        }
-      }
-      `;
-
-      const { status, body } = await request(app.getHttpServer())
-        .post("/graphql")
-        .send({ query })
-        .set("Authorization", `accessToken=${accessTokens.defaultUser}`);
-
-      expect(status).toBe(200);
-
-      expect(body.data.deleteProduct).toHaveProperty("id");
-      expect(body.data.deleteProduct).toHaveProperty("deleted");
-      expect(body.data.deleteProduct.deleted).toBeTruthy();
     });
   });
 

@@ -10,4 +10,9 @@ export class UserResolver {
   public async getUser(@User() { id }: Iuser) {
     return await this.userService.getUser(id);
   }
+
+  @Query("getUserCount")
+  public async getUserCount() {
+    return await this.userService.getUserCount();
+  }
 }
