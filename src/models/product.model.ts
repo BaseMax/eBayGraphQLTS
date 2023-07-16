@@ -49,6 +49,18 @@ class Product extends Document {
     default: true,
   })
   isfeatured: boolean;
+
+  @Prop({
+    type: [String],
+    required: true,
+  })
+  comment: string[];
+
+  @Prop({
+    type: Number,
+    required: true,
+  })
+  rating: number;
 }
 
 const productSchema = SchemaFactory.createForClass(Product);

@@ -94,4 +94,13 @@ export class ProductService {
       count: prCount,
     };
   }
+
+  public async leaveReview(productId: string, rating: string, comment: string) {
+    return await this.productModel.findOneAndUpdate(
+      {
+        _id: this.generateMongoId(productId),
+      },
+      { $inc: { rating }, $push: { comment } },
+    );
+  }
 }

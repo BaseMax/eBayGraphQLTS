@@ -32,8 +32,17 @@ export class ProductResolver {
   }
 
   @Mutation("getProductReviews")
-  public async getProductReviews(@Args("productId") productIs: string) {
-    return await this.productService.getProductReviews(productIs);
+  public async getProductReviews(@Args("productId") productId: string) {
+    return await this.productService.getProductReviews(productId);
+  }
+
+  @Mutation("leaveReview")
+  public async leaveReview(
+    @Args("productId") productId: string,
+    @Args("rating") rating: string,
+    @Args("comment") comment: string,
+  ) {
+    return await this.productService.leaveReview(productId, rating, comment);
   }
 
   @Query("getProduct")
