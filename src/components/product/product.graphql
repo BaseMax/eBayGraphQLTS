@@ -5,6 +5,9 @@ type Product {
     description: String
     price: Int
     seller: Seller
+    isfeatured: Boolean
+    comment: [String]
+    rating: Int
 }
 
 type deleteProductRes {
@@ -19,6 +22,10 @@ type Seller {
 
 type GetProductReviewsRes {
     view: Int
+}
+
+type GetProductCountRes {
+    count: Int!
 }
 
 # inputs
@@ -38,6 +45,9 @@ input UpdateProductInput {
 type Query {
     getProduct(id: ID!): Product!
     searchProducts(title: String!): Product!
+    getTrendingProducts: [Product]!
+    getFeaturedProducts: [Product]!
+    getProductCount: GetProductCountRes
 }
 
 # mutations
@@ -47,4 +57,5 @@ type Mutation {
     deleteProduct(id: ID!): deleteProductRes!
     getSellerProducts(userId: ID!): Product!
     getProductReviews(productId: ID!): GetProductReviewsRes!
+    leaveReview(productId: ID!, rating: Int!, comment: String!): Product!
 }

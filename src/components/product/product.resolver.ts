@@ -32,8 +32,17 @@ export class ProductResolver {
   }
 
   @Mutation("getProductReviews")
-  public async getProductReviews(@Args("productId") productIs: string) {
-    return await this.productService.getProductReviews(productIs);
+  public async getProductReviews(@Args("productId") productId: string) {
+    return await this.productService.getProductReviews(productId);
+  }
+
+  @Mutation("leaveReview")
+  public async leaveReview(
+    @Args("productId") productId: string,
+    @Args("rating") rating: string,
+    @Args("comment") comment: string,
+  ) {
+    return await this.productService.leaveReview(productId, rating, comment);
   }
 
   @Query("getProduct")
@@ -44,5 +53,20 @@ export class ProductResolver {
   @Query("searchProducts")
   public async searchProducts(@Args("title") t: string) {
     return await this.productService.searchProducts(t);
+  }
+
+  @Query("getTrendingProducts")
+  public async getTrendingProducts() {
+    return await this.productService.getTrendingProducts();
+  }
+
+  @Query("getFeaturedProducts")
+  public async getFeaturedProducts() {
+    return await this.productService.getFeaturedProducts();
+  }
+
+  @Query("getProductCount")
+  public async getProductCount() {
+    return await this.productService.getProductCount();
   }
 }
