@@ -267,6 +267,24 @@ describe("AppController (e2e)", () => {
       expect(body.data.makeOrder).toHaveProperty("userId");
     });
 
+    it("should return order shipping addres", async () => {
+      const query = `
+     mutation order {
+      getShippingAddress(userId: "${defaultUserId}") {
+        id
+        shippingAddress
+      }
+     }
+      `;
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+      expect(body.data.getShippingAddress).toHaveProperty("id");
+      expect(body.data.getShippingAddress).toHaveProperty("shippingAddress");
+    });
+
     it("should get order by product id", async () => {
       const query = `
       mutation order {
@@ -696,6 +714,81 @@ describe("AppController (e2e)", () => {
 
       expect(body.data.markAllNotificationsAsRead).toHaveProperty("id");
       expect(body.data.markAllNotificationsAsRead).toHaveProperty("isread");
+    });
+  });
+
+  describe("payment", () => {
+    let paymentId: string;
+
+    it("should add payment method", async () => {
+      const query = `
+      mutation payment($input: AddPaymentMethodInput!) {
+        addPaymentMethod(adm: $input) {
+          id
+          type
+        }
+      }
+      `;
+
+      const variables = {
+        input: {
+          type: "test",
+          cardNumber: "2222222222222222222222222222222",
+          expirationDate: "2030/9/11",
+          cvv: "444",
+          userId: defaultUserId,
+        },
+      };
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query, variables });
+
+      expect(status).toBe(200);
+
+      expect(body.data.addPaymentMethod).toHaveProperty("id");
+      expect(body.data.addPaymentMethod).toHaveProperty("type");
+      paymentId = body.data.addPaymentMethod.id;
+    });
+
+    it("should return payment method for user", async () => {
+      const query = `
+      mutation payment {
+        getPaymentMethods(userId: "${defaultUserId}") {
+          id
+          type
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.getPaymentMethods).toHaveProperty("id");
+      expect(body.data.getPaymentMethods).toHaveProperty("type");
+    });
+
+    it("should delete payment method", async () => {
+      const query = `
+      mutation payment {
+        deletePaymentMethod(userId: "${defaultUserId}", paymentId: "${paymentId}") {
+          id
+          type
+        }
+      }
+      `;
+
+      const { status, body } = await request(app.getHttpServer())
+        .post("/graphql")
+        .send({ query });
+
+      expect(status).toBe(200);
+
+      expect(body.data.deletePaymentMethod).toHaveProperty("id");
+      expect(body.data.deletePaymentMethod).toHaveProperty("type");
     });
   });
 

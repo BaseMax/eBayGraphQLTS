@@ -28,6 +28,12 @@ class Orders extends Document {
     type: Number,
   })
   totalAmount: number;
+
+  @Prop({
+    type: String,
+    default: `turkey - ${new Date()}`,
+  })
+  shippingAddress: string;
 }
 
 const ordersSchema = SchemaFactory.createForClass(Orders);

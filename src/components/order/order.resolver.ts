@@ -24,4 +24,40 @@ export class OrderResolver {
   public async getOrderByUser(@Args("userId") userId: string) {
     return await this.orderService.getOrderByUser(userId);
   }
+
+  @Mutation("getShippingAddress")
+  public async getShippingAddress(@Args("userId") userId: string) {
+    return await this.orderService.getShippingAddress(userId);
+  }
+
+  @Mutation("updateShippingAddress")
+  public async updateShippingAddress(@Args("csa") csa: Record<any, any>) {
+    const userId = csa.userId;
+    delete csa.userId;
+
+    return await this.orderService.updateShippingAddress(userId, csa);
+  }
+
+  @Mutation("createShippingAddress")
+  public async createShippingAddress(@Args("csa") csa: Record<any, any>) {
+    return await this.orderService.createShippingAddress(csa);
+  }
+
+  @Mutation("getBillingAddress")
+  public async getBillingAddress(@Args("userId") userId: string) {
+    return await this.orderService.getBillingAddress(userId);
+  }
+
+  @Mutation("updateBillingAddress")
+  public async updateBillingAddress(@Args("csa") csa: Record<any, any>) {
+    const userId = csa.userId;
+    delete csa.userId;
+
+    return await this.orderService.updateBillingAddress(userId, csa);
+  }
+
+  @Mutation("createBillingAddress")
+  public async createBillingAddress(@Args("csa") csa: Record<any, any>) {
+    return await this.orderService.createBillingAddress(csa);
+  }
 }
