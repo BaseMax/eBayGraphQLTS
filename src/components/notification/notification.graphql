@@ -1,0 +1,29 @@
+# type
+type Notif {
+  content: String
+  id: String
+  userId: User
+  isread: Boolean
+  title: String
+}
+
+type User {
+    id: String
+    name: String
+}
+
+type GetUnreadNotificationCountRes {
+  count: Int!
+}
+
+# query
+type Query {
+  getUnreadNotificationCount: GetUnreadNotificationCountRes!
+}
+
+# mutation
+type Mutation {
+  getNotifications(userId: ID!): Notif!
+  markNotificationAsRead(userId: ID!, notificationId: ID!): Notif!
+  markAllNotificationsAsRead(userId: ID!): Notif!
+}
